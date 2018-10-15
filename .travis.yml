@@ -1,0 +1,22 @@
+sudo: required
+
+services:
+  - docker
+
+language: generic
+
+jobs:
+  include:
+    - script:
+        - echo "Build..."
+        - docker build -t swhurl/website:$TRAVIS_COMMIT .
+        - docker build -t swhurl/website-test -f Dockerfile.test .
+        - echo "Test..."
+        - docker network create -d bridge swhurl
+        - docker run -d --name website --net swhurl swhurl/website:$TRAVIS_COMMIT
+        - docker run --name website-test --net swhurl -e DOCKER_NETWORK=true swhurl/website-test
+        - docker stop website
+        - docker network rm swhurl
+        - echo "Push..."
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push swhurl/website:$TRAVIS_COMMIT 
