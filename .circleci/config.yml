@@ -53,10 +53,11 @@ jobs:
           echo "production: tag == $CIRCLE_TAG"
           echo "sha1: '$CIRCLE_SHA1'"
           echo "tag: '$CIRCLE_TAG'"
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker pull swhurl/website:$CIRCLE_SHA1
           docker tag swhurl/website:$CIRCLE_SHA1 swhurl/website:$CIRCLE_TAG
           docker push swhurl/website:$CIRCLE_TAG
-          echo "deploy swhurl/website:$CIRCLE_TAG"
+          echo "deploy swhurl/website:${CIRCLE_TAG##v}"
           ssh $SSH_USER@$SSH_HOST "kubectl get deployment swhurl-website-staging -o yaml | sed -r 's/website:(.*)/website:$CIRCLE_TAG/g' | kubectl apply -f -"
         
 workflows:
