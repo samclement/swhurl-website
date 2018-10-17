@@ -1,5 +1,18 @@
 version: 2
 jobs:
+  build_test: 
+    machine: true
+    steps:
+      - checkout
+      - run: |
+          docker build -t swhurl/website:$CIRCLE_SHA1 .
+          docker build -t swhurl/website-test -f Dockerfile.test .
+      - run: |
+          docker network create -d bridge swhurl
+          docker run -d --name website --net swhurl swhurl/website:$CIRCLE_SHA1
+          docker run --name website-test --net swhurl -e DOCKER_NETWORK=true swhurl/website-test
+          docker stop website
+          docker network rm swhurl
   build_test_push:
     machine: true
     steps:
@@ -23,6 +36,7 @@ jobs:
           echo "staging: branch == master"
           echo "sha1: '$CIRCLE_SHA1'"
           echo "tag: '$CIRCLE_TAG'"
+          echo "deploy: swhurl/website:$CIRCLE_SHA1"
   deploy_prod:
     machine: true
     steps:
@@ -30,10 +44,20 @@ jobs:
           echo "production: tag == $CIRCLE_TAG"
           echo "sha1: '$CIRCLE_SHA1'"
           echo "tag: '$CIRCLE_TAG'"
+          docker pull swhurl/website:$CIRCLE_SHA1
+          docker tag swhurl/website:$CIRCLE_SHA1 swhurl/website:$CIRCLE_TAG
+          docker push swhurl/website:$CIRCLE_TAG
+          echo "deploy swhurl/website:$CIRCLE_TAG"
         
 workflows:
   version: 2
-  build_test_push_workflow:
+  build_test:
+    jobs:
+      - build_test:
+          filters:
+            branches:
+              ignore: master
+  deploy_staging:
     jobs: 
       - build_test_push
       - deploy_staging:
@@ -42,6 +66,8 @@ workflows:
           filters:
             branches:
               only: master
+  deploy_prod:
+    jobs:
       - deploy_prod:
           filters:
             branches:
