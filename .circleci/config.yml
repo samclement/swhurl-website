@@ -32,17 +32,21 @@ jobs:
   deploy_staging:
     machine: true
     steps:
+      - add_ssh_keys:
+          fingerprints: 
+            - "35:df:e3:cc:13:79:99:24:29:2f:39:b4:8b:5a:0a:14"
       - run: |
           echo "staging: branch == master"
           echo "sha1: '$CIRCLE_SHA1'"
           echo "tag: '$CIRCLE_TAG'"
           echo "deploy: swhurl/website:$CIRCLE_SHA1"
-          ssh sam@swhurl.com
-          kubectl describe pods swhurl-website-staging -o yaml | sed -r 's/website:(.*)/website:$CIRCLE_SHA1/g' | kubectl apply -f -
-          exit
+          ssh $SSH_USER@$SSH_HOST "kubectl get deployment swhurl-website-staging -o yaml | sed -r 's/website:(.*)/website:$CIRCLE_SHA1/g' | kubectl apply -f -"
   deploy_prod:
     machine: true
     steps:
+      - add_ssh_keys:
+          fingerprints: 
+            - "35:df:e3:cc:13:79:99:24:29:2f:39:b4:8b:5a:0a:14"
       - run: |
           echo "production: tag == $CIRCLE_TAG"
           echo "sha1: '$CIRCLE_SHA1'"
