@@ -1,12 +1,12 @@
 FROM node:10-alpine
 EXPOSE 3000
-ARG DRONE_COMMIT=none
-ARG DRONE_TAG=none
-ENV DRONE_COMMIT=$DRONE_COMMIT
-ENV DRONE_TAG=$DRONE_TAG
+ARG CIRCLE_SHA1=none
+ARG CIRCLE_TAG=none
+ENV CIRCLE_SHA1=$CIRCLE_SHA1
+ENV CIRCLE_TAG=$CIRCLE_TAG
 WORKDIR /www
 COPY . /www/
-RUN sed -i '4i\ \ "commitHash": "'"$DRONE_COMMIT"'",\n\ \ "tag": "'"$DRONE_TAG"'",' package.json
+RUN echo -e "commit: $CIRCLE_SHA1\ntag: $CIRCLE_TAG" > ./version.txt
 RUN yarn install --production \
     && yarn run build
 CMD ["yarn", "start", "--", "-p", "3000"]
