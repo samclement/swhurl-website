@@ -31,3 +31,6 @@ Demo Nextjs application that includes: styled-compoenents, open-tracing, prometh
 
 - `docker build -t swhurl/website .`
 - `docker run -d --init --restart always --net swhurl --name website swhurl/website`
+
+
+Poop
