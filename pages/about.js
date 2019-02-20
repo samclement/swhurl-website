@@ -2,8 +2,9 @@ import React from 'react'
 import H1 from '../components/elements/H1.js'
 import Nav from '../components/blocks/Nav'
 import Head from 'next/head'
+import { getTodo } from '../services'
 
-export default () => {
+function About (todo) {
   return (
     <div>
       <Head>
@@ -11,6 +12,14 @@ export default () => {
       </Head>
       <Nav />
       <H1>About</H1>
+      <p>{todo.userId}</p>
     </div>
   )
 }
+
+About.getInitialProps = async ({ req }) => {
+  const todo = await getTodo()
+  return todo
+}
+
+export default About
