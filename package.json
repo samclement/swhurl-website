@@ -87,7 +87,8 @@
     "coverageDirectory": "./test-output/jest",
     "collectCoverageFrom": [
       "components/**/*.js",
-      "pages/**/*.js"
+      "pages/**/*.js",
+      "services/**/*.js"
     ],
     "coveragePathIgnorePatterns": [
       "./test-output/coverage/",
