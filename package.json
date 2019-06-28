@@ -45,7 +45,7 @@
     "babel-core": "^7.0.0-bridge",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.1.0",
-    "babel-plugin-styled-components": "1.10.0",
+    "babel-plugin-styled-components": "1.10.4",
     "chai": "4.2.0",
     "chromedriver": "2.46.0",
     "enzyme": "3.9.0",
