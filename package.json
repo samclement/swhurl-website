@@ -50,7 +50,7 @@
     "chromedriver": "2.46.0",
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.11.1",
-    "enzyme-to-json": "3.3.5",
+    "enzyme-to-json": "3.4.3",
     "eslint": "5.15.2",
     "eslint-config-standard": "12.0.0",
     "eslint-config-standard-react": "7.0.2",
