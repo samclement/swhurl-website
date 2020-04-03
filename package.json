@@ -70,7 +70,7 @@
     "prettier": "1.15.3",
     "raf": "3.4.1",
     "table": "5.2.0",
-    "wdio-chromedriver-service": "^5.0.0",
+    "wdio-chromedriver-service": "^6.0.1",
     "webdriverio": "^5.4.14"
   },
   "jest": {
